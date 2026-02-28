@@ -8,6 +8,7 @@ import {
 } from "./ui.js";
 import { togglePlay, setOnPlayStart, setOnPlayStop, setShowStatus as setSeqShowStatus } from "./sequencer.js";
 import { initVisualizer, setVizMode, startViz, stopViz } from "./visualizer.js";
+import { initFullscreenViz } from "./fullscreen-viz.js";
 import {
     savePattern, selectPattern, copyPatternJSON, pastePatternJSON,
     updatePatternSlotUI, setPatternCallbacks, getState, loadState,
@@ -66,6 +67,7 @@ randomize();
 updatePatternSlotUI();
 updateStepDurHint();
 initVisualizer();
+initFullscreenViz();
 
 // URL sync — load from hash if present (overrides randomize)
 initUrlSync(getState, (st) => {

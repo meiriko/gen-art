@@ -252,6 +252,9 @@
                     <button class="btn danger" onclick="clearAll()">
                         &#10005; CLEAR
                     </button>
+                    <button class="btn" id="viz-open-btn" style="border-color: var(--purple); color: var(--purple)">
+                        &#9670; VISUALIZE
+                    </button>
                     <button class="btn" onclick="exportWav()">
                         &darr; WAV
                     </button>
@@ -332,6 +335,12 @@
             </div>
         </div>
         <div class="tooltip" id="tooltip"></div>
+
+        <div id="viz-overlay" class="viz-overlay">
+            <canvas id="viz-fullscreen"></canvas>
+            <button id="viz-close-btn" class="viz-overlay-btn viz-close">&times;</button>
+            <button id="viz-mode-cycle" class="viz-overlay-btn viz-cycle">PARTICLES</button>
+        </div>
 
         <script type="module" src="js/main.js"></script>
     </body>
