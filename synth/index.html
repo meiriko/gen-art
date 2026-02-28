@@ -11,20 +11,42 @@
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
-        <h1>Random Synth &mdash; Step Sequencer</h1>
+        <h1>Random Synth &mdash; Step Sequencer (v-0.1)</h1>
         <div class="synth">
             <div class="viz-container">
                 <canvas id="viz"></canvas>
                 <div class="viz-modes">
-                    <button class="viz-mode-btn active" data-mode="spectrum" onclick="setVizMode('spectrum')">SPEC</button>
-                    <button class="viz-mode-btn" data-mode="wave" onclick="setVizMode('wave')">WAVE</button>
-                    <button class="viz-mode-btn" data-mode="split" onclick="setVizMode('split')">BOTH</button>
+                    <button
+                        class="viz-mode-btn active"
+                        data-mode="spectrum"
+                        onclick="setVizMode('spectrum')"
+                    >
+                        SPEC
+                    </button>
+                    <button
+                        class="viz-mode-btn"
+                        data-mode="wave"
+                        onclick="setVizMode('wave')"
+                    >
+                        WAVE
+                    </button>
+                    <button
+                        class="viz-mode-btn"
+                        data-mode="split"
+                        onclick="setVizMode('split')"
+                    >
+                        BOTH
+                    </button>
                 </div>
             </div>
 
             <div class="config-bar">
                 <label>Time</label>
-                <select class="ctrl-select" id="time-sig-select" onchange="onTimeSigChange()">
+                <select
+                    class="ctrl-select"
+                    id="time-sig-select"
+                    onchange="onTimeSigChange()"
+                >
                     <option value="4/4">4/4</option>
                     <option value="3/4">3/4</option>
                     <option value="6/8">6/8</option>
@@ -32,7 +54,11 @@
                     <option value="7/8">7/8</option>
                 </select>
                 <label>Steps</label>
-                <select class="ctrl-select" id="steps-select" onchange="onStepsChange()">
+                <select
+                    class="ctrl-select"
+                    id="steps-select"
+                    onchange="onStepsChange()"
+                >
                     <option value="8">8</option>
                     <option value="12">12</option>
                     <option value="16" selected>16</option>
@@ -55,13 +81,28 @@
             <div id="seq-rows"></div>
             <div class="row-mgmt">
                 <button class="btn" onclick="addRow()">+ ADD ROW</button>
-                <button class="btn danger" onclick="removeRow()">&minus; REMOVE</button>
-                <button class="btn" id="quick-rec-btn" onclick="quickRec()" style="border-color: var(--pink); color: var(--pink)">&#9679; REC SAMPLE</button>
+                <button class="btn danger" onclick="removeRow()">
+                    &minus; REMOVE
+                </button>
+                <button
+                    class="btn"
+                    id="quick-rec-btn"
+                    onclick="quickRec()"
+                    style="border-color: var(--pink); color: var(--pink)"
+                >
+                    &#9679; REC SAMPLE
+                </button>
             </div>
 
             <div class="controls">
                 <div class="knob-group">
-                    <div class="knob-wrap" data-param="filter" data-min="200" data-max="8000" data-val="2000">
+                    <div
+                        class="knob-wrap"
+                        data-param="filter"
+                        data-min="200"
+                        data-max="8000"
+                        data-val="2000"
+                    >
                         <div class="knob-bg"></div>
                         <div class="knob-indicator" id="knob-filter-ind"></div>
                     </div>
@@ -69,23 +110,47 @@
                     <div class="knob-val" id="knob-filter-val">2000</div>
                 </div>
                 <div class="knob-group">
-                    <div class="knob-wrap" data-param="resonance" data-min="0.1" data-max="20" data-val="4">
+                    <div
+                        class="knob-wrap"
+                        data-param="resonance"
+                        data-min="0.1"
+                        data-max="20"
+                        data-val="4"
+                    >
                         <div class="knob-bg"></div>
-                        <div class="knob-indicator" id="knob-resonance-ind"></div>
+                        <div
+                            class="knob-indicator"
+                            id="knob-resonance-ind"
+                        ></div>
                     </div>
                     <div class="knob-label">Reso</div>
                     <div class="knob-val" id="knob-resonance-val">4.0</div>
                 </div>
                 <div class="knob-group">
-                    <div class="knob-wrap" data-param="filterEnv" data-min="0" data-max="4000" data-val="800">
+                    <div
+                        class="knob-wrap"
+                        data-param="filterEnv"
+                        data-min="0"
+                        data-max="4000"
+                        data-val="800"
+                    >
                         <div class="knob-bg"></div>
-                        <div class="knob-indicator" id="knob-filterEnv-ind"></div>
+                        <div
+                            class="knob-indicator"
+                            id="knob-filterEnv-ind"
+                        ></div>
                     </div>
                     <div class="knob-label">Env</div>
                     <div class="knob-val" id="knob-filterEnv-val">800</div>
                 </div>
                 <div class="knob-group">
-                    <div class="knob-wrap" data-param="reverb" data-min="0" data-max="1" data-val="0.3">
+                    <div
+                        class="knob-wrap"
+                        data-param="reverb"
+                        data-min="0"
+                        data-max="1"
+                        data-val="0.3"
+                    >
                         <div class="knob-bg"></div>
                         <div class="knob-indicator" id="knob-reverb-ind"></div>
                     </div>
@@ -93,7 +158,13 @@
                     <div class="knob-val" id="knob-reverb-val">0.30</div>
                 </div>
                 <div class="knob-group">
-                    <div class="knob-wrap" data-param="delay" data-min="0" data-max="0.7" data-val="0.25">
+                    <div
+                        class="knob-wrap"
+                        data-param="delay"
+                        data-min="0"
+                        data-max="0.7"
+                        data-val="0.25"
+                    >
                         <div class="knob-bg"></div>
                         <div class="knob-indicator" id="knob-delay-ind"></div>
                     </div>
@@ -101,7 +172,13 @@
                     <div class="knob-val" id="knob-delay-val">0.25</div>
                 </div>
                 <div class="knob-group">
-                    <div class="knob-wrap" data-param="delayFb" data-min="0" data-max="0.85" data-val="0.35">
+                    <div
+                        class="knob-wrap"
+                        data-param="delayFb"
+                        data-min="0"
+                        data-max="0.85"
+                        data-val="0.35"
+                    >
                         <div class="knob-bg"></div>
                         <div class="knob-indicator" id="knob-delayFb-ind"></div>
                     </div>
@@ -109,7 +186,13 @@
                     <div class="knob-val" id="knob-delayFb-val">0.35</div>
                 </div>
                 <div class="knob-group">
-                    <div class="knob-wrap" data-param="swing" data-min="0" data-max="0.12" data-val="0">
+                    <div
+                        class="knob-wrap"
+                        data-param="swing"
+                        data-min="0"
+                        data-max="0.12"
+                        data-val="0"
+                    >
                         <div class="knob-bg"></div>
                         <div class="knob-indicator" id="knob-swing-ind"></div>
                     </div>
@@ -120,59 +203,130 @@
 
             <div class="bottom">
                 <div>
-                    <div class="bpm-display" id="bpm-display" onclick="startBpmEdit()">120</div>
-                    <input class="bpm-input" id="bpm-input" type="number" min="40" max="300" value="120"
-                        onblur="commitBpmEdit()" onkeydown="if (event.key === 'Enter') commitBpmEdit();" />
+                    <div
+                        class="bpm-display"
+                        id="bpm-display"
+                        onclick="startBpmEdit()"
+                    >
+                        120
+                    </div>
+                    <input
+                        class="bpm-input"
+                        id="bpm-input"
+                        type="number"
+                        min="40"
+                        max="300"
+                        value="120"
+                        onblur="commitBpmEdit()"
+                        onkeydown="if (event.key === 'Enter') commitBpmEdit();"
+                    />
                     <div class="bpm-label">BPM</div>
                     <div class="bpm-btns" style="margin-top: 6px">
-                        <button class="btn" onclick="changeBpm(-5)">&minus;</button>
+                        <button class="btn" onclick="changeBpm(-5)">
+                            &minus;
+                        </button>
                         <button class="btn" onclick="changeBpm(5)">+</button>
                     </div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 6px; align-items: center;">
+                <div
+                    style="
+                        display: flex;
+                        flex-direction: column;
+                        gap: 6px;
+                        align-items: center;
+                    "
+                >
                     <div class="status" id="status">STOPPED</div>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 5px">
-                    <button class="btn primary" id="play-btn" onclick="togglePlay()">&#9654; PLAY</button>
-                    <button class="btn" onclick="randomize()">&#10227; RANDOM</button>
-                    <button class="btn danger" onclick="clearAll()">&#10005; CLEAR</button>
-                    <button class="btn" onclick="exportWav()">&darr; WAV</button>
+                    <button
+                        class="btn primary"
+                        id="play-btn"
+                        onclick="togglePlay()"
+                    >
+                        &#9654; PLAY
+                    </button>
+                    <button class="btn" onclick="randomize()">
+                        &#10227; RANDOM
+                    </button>
+                    <button class="btn danger" onclick="clearAll()">
+                        &#10005; CLEAR
+                    </button>
+                    <button class="btn" onclick="exportWav()">
+                        &darr; WAV
+                    </button>
                 </div>
             </div>
 
             <div class="pattern-bar">
                 <div class="lbl">Patterns</div>
-                <div class="pat-slot active" data-slot="0" onclick="selectPattern(0)">1</div>
-                <div class="pat-slot" data-slot="1" onclick="selectPattern(1)">2</div>
-                <div class="pat-slot" data-slot="2" onclick="selectPattern(2)">3</div>
-                <div class="pat-slot" data-slot="3" onclick="selectPattern(3)">4</div>
-                <div class="pat-slot" data-slot="4" onclick="selectPattern(4)">5</div>
-                <div class="pat-slot" data-slot="5" onclick="selectPattern(5)">6</div>
-                <div class="pat-slot" data-slot="6" onclick="selectPattern(6)">7</div>
-                <div class="pat-slot" data-slot="7" onclick="selectPattern(7)">8</div>
+                <div
+                    class="pat-slot active"
+                    data-slot="0"
+                    onclick="selectPattern(0)"
+                >
+                    1
+                </div>
+                <div class="pat-slot" data-slot="1" onclick="selectPattern(1)">
+                    2
+                </div>
+                <div class="pat-slot" data-slot="2" onclick="selectPattern(2)">
+                    3
+                </div>
+                <div class="pat-slot" data-slot="3" onclick="selectPattern(3)">
+                    4
+                </div>
+                <div class="pat-slot" data-slot="4" onclick="selectPattern(4)">
+                    5
+                </div>
+                <div class="pat-slot" data-slot="5" onclick="selectPattern(5)">
+                    6
+                </div>
+                <div class="pat-slot" data-slot="6" onclick="selectPattern(6)">
+                    7
+                </div>
+                <div class="pat-slot" data-slot="7" onclick="selectPattern(7)">
+                    8
+                </div>
                 <div class="pat-actions">
                     <button class="btn" onclick="savePattern()">SAVE</button>
-                    <button class="btn" onclick="copyPatternJSON()">COPY</button>
-                    <button class="btn" onclick="pastePatternJSON()">PASTE</button>
+                    <button class="btn" onclick="copyPatternJSON()">
+                        COPY
+                    </button>
+                    <button class="btn" onclick="pastePatternJSON()">
+                        PASTE
+                    </button>
                 </div>
             </div>
 
             <div class="sampler-panel">
                 <div class="sampler-header" onclick="toggleSamplerPanel()">
                     <span class="arrow open" id="sampler-arrow">&#9654;</span>
-                    <span class="lbl">Sampler &mdash; Record &amp; Use Your Own Sounds</span>
+                    <span class="lbl"
+                        >Sampler &mdash; Record &amp; Use Your Own Sounds</span
+                    >
                 </div>
                 <div class="sampler-body open" id="sampler-body">
                     <div class="rec-controls">
-                        <button class="rec-btn" id="rec-btn" onclick="toggleRecording()">
+                        <button
+                            class="rec-btn"
+                            id="rec-btn"
+                            onclick="toggleRecording()"
+                        >
                             <span class="rec-dot"></span> RECORD
                         </button>
                         <span class="rec-timer" id="rec-timer">0.0s</span>
-                        <span class="rec-hint">Max 3s &middot; 1 step = <span id="step-dur-hint">125</span>ms at current BPM</span>
+                        <span class="rec-hint"
+                            >Max 3s &middot; 1 step =
+                            <span id="step-dur-hint">125</span>ms at current
+                            BPM</span
+                        >
                     </div>
                     <canvas class="rec-waveform" id="rec-waveform"></canvas>
                     <div class="sample-list" id="sample-list">
-                        <div class="no-samples" id="no-samples">No samples yet &mdash; hit record to capture a sound</div>
+                        <div class="no-samples" id="no-samples">
+                            No samples yet &mdash; hit record to capture a sound
+                        </div>
                     </div>
                 </div>
             </div>
