@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Gen Art</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+                background: #080c10;
+                color: #8ecce0;
+                font-family: "Share Tech Mono", monospace;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 40px 20px;
+            }
+            h1 {
+                font-family: "Orbitron", sans-serif;
+                font-size: 14px;
+                letter-spacing: 10px;
+                color: #00e5ff;
+                opacity: 0.6;
+                margin-bottom: 40px;
+                text-transform: uppercase;
+            }
+            .projects {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: center;
+            }
+            a.project {
+                display: block;
+                background: #0d1218;
+                border: 1px solid #1a2a3a;
+                border-radius: 8px;
+                padding: 30px 40px;
+                text-decoration: none;
+                color: #8ecce0;
+                font-size: 14px;
+                letter-spacing: 2px;
+                transition: all 0.15s;
+            }
+            a.project:hover {
+                border-color: #00e5ff;
+                color: #00e5ff;
+                box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+            }
+            .project-label {
+                font-family: "Orbitron", sans-serif;
+                font-size: 11px;
+                letter-spacing: 4px;
+                text-transform: uppercase;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Gen Art</h1>
+        <div class="projects">
+            <a class="project" href="synth/">
+                <div class="project-label">Random Synth</div>
+            </a>
+        </div>
+    </body>
+</html>
