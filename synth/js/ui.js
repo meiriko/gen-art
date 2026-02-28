@@ -11,6 +11,14 @@ const seqContainer = document.getElementById("seq-rows");
 const seqHeader = document.getElementById("seq-header");
 const tooltip = document.getElementById("tooltip");
 let tooltipTimeout;
+const stepElementCache = {};
+
+// Callback for URL sync — set by main.js
+let onStateChangeFn = null;
+let suppressStateNotify = false;
+export function setOnStateChange(fn) { onStateChangeFn = fn; }
+export function setSuppressStateNotify(v) { suppressStateNotify = v; }
+function notifyStateChange() { if (onStateChangeFn && !suppressStateNotify) onStateChangeFn(); }
 
 // Knob state
 const knobState = {};
@@ -35,6 +43,7 @@ export function showTooltip(x, y, text) {
 }
 
 export function rebuildAll() {
+    for (const k in stepElementCache) delete stepElementCache[k];
     buildHeader();
     buildRows();
     updateRowSilencedState();
@@ -176,6 +185,7 @@ function buildRows() {
                 showTooltip(rect.left + rect.width / 2, rect.top - 20, noteName(state.rows[ri].notes[i]));
             }, { passive: false });
 
+            stepElementCache[`${ri}-${i}`] = s;
             div.appendChild(s);
         }
 
@@ -256,7 +266,9 @@ export function updateStepUI() {
         const inst = INSTRUMENTS[row.instrument];
         const isMel = inst ? inst.type === "melodic" : false;
         const span = getSampleSpan(ri);
-        document.querySelectorAll(`.step[data-row="${ri}"]`).forEach((el, i) => {
+        for (let i = 0; i < state.STEPS; i++) {
+            const el = stepElementCache[`${ri}-${i}`];
+            if (!el) continue;
             el.classList.toggle("active", row.pattern[i]);
             el.classList.toggle("playing", state.isPlaying && i === state.currentStep);
             el.classList.remove("span-start", "span-mid", "span-end");
@@ -277,8 +289,9 @@ export function updateStepUI() {
                     bar.style.display = "none";
                 }
             }
-        });
+        }
     });
+    notifyStateChange();
 }
 
 export function updateDropdowns() {
@@ -397,6 +410,7 @@ export function changeBpm(d) {
     document.getElementById("bpm-display").textContent = state.bpm;
     document.getElementById("bpm-input").value = state.bpm;
     updateStepDurHint();
+    notifyStateChange();
 }
 
 export function startBpmEdit() {
@@ -415,6 +429,7 @@ export function commitBpmEdit() {
     document.getElementById("bpm-input").style.display = "none";
     document.getElementById("bpm-display").style.display = "block";
     updateStepDurHint();
+    notifyStateChange();
 }
 
 export function updateStepDurHint() {
@@ -502,4 +517,5 @@ export function applyKnob(param, val, min, max) {
     } else if (param === "delayFb") {
         getDelayFeedback().gain.setTargetAtTime(val, now, 0.02);
     }
+    notifyStateChange();
 }

@@ -2,13 +2,26 @@ import { state } from "./state.js";
 import { getAnalyser, getAnalyserWave, getAnalyserData, getWaveData } from "./audio.js";
 
 let viz, vCtx;
+let vizRafId = null;
 
 export function initVisualizer() {
     viz = document.getElementById("viz");
     vCtx = viz.getContext("2d");
     resizeViz();
     window.addEventListener("resize", resizeViz);
-    drawViz();
+    startViz();
+}
+
+export function startViz() {
+    if (vizRafId !== null) return;
+    vizRafId = requestAnimationFrame(drawViz);
+}
+
+export function stopViz() {
+    if (vizRafId !== null) {
+        cancelAnimationFrame(vizRafId);
+        vizRafId = null;
+    }
 }
 
 function resizeViz() {
@@ -24,7 +37,7 @@ export function setVizMode(m) {
 }
 
 function drawViz() {
-    requestAnimationFrame(drawViz);
+    vizRafId = requestAnimationFrame(drawViz);
     const W = viz.width, H = viz.height;
     vCtx.fillStyle = "#060a0e";
     vCtx.fillRect(0, 0, W, H);

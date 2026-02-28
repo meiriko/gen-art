@@ -4,14 +4,15 @@ import {
     onTimeSigChange, onStepsChange, addRow, removeRow,
     randomize, clearAll, changeBpm, startBpmEdit, commitBpmEdit,
     initKnobs, showStatus, getKnobState, applyKnob,
+    setOnStateChange, setSuppressStateNotify,
 } from "./ui.js";
-import { togglePlay } from "./sequencer.js";
-import { setOnStepChange, setShowStatus as setSeqShowStatus } from "./sequencer.js";
-import { initVisualizer, setVizMode } from "./visualizer.js";
+import { togglePlay, setOnPlayStart, setOnPlayStop, setShowStatus as setSeqShowStatus } from "./sequencer.js";
+import { initVisualizer, setVizMode, startViz, stopViz } from "./visualizer.js";
 import {
     savePattern, selectPattern, copyPatternJSON, pastePatternJSON,
-    updatePatternSlotUI, setPatternCallbacks,
+    updatePatternSlotUI, setPatternCallbacks, getState, loadState,
 } from "./patterns.js";
+import { initUrlSync, pushStateToUrl } from "./url-sync.js";
 import { exportWav, setShowStatus as setExportShowStatus } from "./export.js";
 import {
     toggleSamplerPanel, quickRec, toggleRecording, renderSampleList,
@@ -19,7 +20,6 @@ import {
 } from "./sampler.js";
 
 // Wire up callbacks to avoid circular imports
-setOnStepChange(updateStepUI);
 setSeqShowStatus(showStatus);
 setExportShowStatus(showStatus);
 setSamplerShowStatus(showStatus);
@@ -33,6 +33,9 @@ setPatternCallbacks({
     getKnobState,
     applyKnob,
 });
+setOnPlayStart(() => { startHighlightLoop(); startViz(); });
+setOnPlayStop(() => { stopHighlightLoop(); stopViz(); });
+setOnStateChange(pushStateToUrl);
 
 // Expose functions to HTML onclick handlers
 window.togglePlay = togglePlay;
@@ -64,9 +67,31 @@ updatePatternSlotUI();
 updateStepDurHint();
 initVisualizer();
 
-// Step highlight animation loop
+// URL sync — load from hash if present (overrides randomize)
+initUrlSync(getState, (st) => {
+    setSuppressStateNotify(true);
+    try { loadState(st); } finally { setSuppressStateNotify(false); }
+}).then((loaded) => {
+    if (loaded) updateStepDurHint();
+});
+
+// Step highlight animation loop — only runs while playing
+let highlightRafId = null;
 function stepHighlightLoop() {
-    requestAnimationFrame(stepHighlightLoop);
-    if (state.isPlaying) updateStepUI();
+    setSuppressStateNotify(true);
+    try { updateStepUI(); } finally { setSuppressStateNotify(false); }
+    highlightRafId = requestAnimationFrame(stepHighlightLoop);
 }
-stepHighlightLoop();
+
+export function startHighlightLoop() {
+    if (highlightRafId !== null) return;
+    highlightRafId = requestAnimationFrame(stepHighlightLoop);
+}
+
+export function stopHighlightLoop() {
+    if (highlightRafId !== null) {
+        cancelAnimationFrame(highlightRafId);
+        highlightRafId = null;
+    }
+    updateStepUI(); // final update to clear playing state
+}

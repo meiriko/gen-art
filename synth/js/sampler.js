@@ -9,6 +9,7 @@ let recStartTime = 0;
 let recTimerInterval = null;
 let recAnalyser = null;
 let recAnimFrame = null;
+let micCtx = null;
 
 // Callback set by ui.js to avoid circular import
 let onSampleAdded = null;
@@ -82,7 +83,7 @@ export async function toggleRecording() {
     }, 100);
 
     try {
-        const micCtx = new AudioContext();
+        micCtx = new AudioContext();
         const micSrc = micCtx.createMediaStreamSource(recStream);
         recAnalyser = micCtx.createAnalyser();
         recAnalyser.fftSize = 256;
@@ -104,6 +105,11 @@ function stopRecording() {
     document.getElementById("rec-btn").innerHTML =
         '<span class="rec-dot"></span> RECORD';
     cancelAnimationFrame(recAnimFrame);
+    if (micCtx) {
+        micCtx.close().catch(() => {});
+        micCtx = null;
+    }
+    recAnalyser = null;
     const cv = document.getElementById("rec-waveform");
     const c = cv.getContext("2d");
     c.clearRect(0, 0, cv.width, cv.height);

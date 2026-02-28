@@ -7,12 +7,14 @@ import { INSTRUMENTS } from "./instruments.js";
 import { midiToFreq } from "./scales.js";
 import { playSample } from "./sampler.js";
 
+// Callbacks set by main.js for rAF loop control
+let onPlayStart = null;
+let onPlayStop = null;
+export function setOnPlayStart(fn) { onPlayStart = fn; }
+export function setOnPlayStop(fn) { onPlayStop = fn; }
+
 let nextStepTime = 0;
 let schedulerTimer = null;
-
-// Callback set by ui.js
-let onStepChange = null;
-export function setOnStepChange(fn) { onStepChange = fn; }
 
 let showStatusFn = null;
 export function setShowStatus(fn) { showStatusFn = fn; }
@@ -85,11 +87,12 @@ export function togglePlay() {
         document.getElementById("play-btn").textContent = "\u25a0 STOP";
         document.getElementById("status").textContent = "PLAYING";
         document.getElementById("status").classList.add("playing");
+        if (onPlayStart) onPlayStart();
     } else {
         clearInterval(schedulerTimer);
         document.getElementById("play-btn").textContent = "\u25b6 PLAY";
         document.getElementById("status").textContent = "STOPPED";
         document.getElementById("status").classList.remove("playing");
-        if (onStepChange) onStepChange();
+        if (onPlayStop) onPlayStop();
     }
 }
